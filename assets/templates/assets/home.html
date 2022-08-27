@@ -1,0 +1,26 @@
+{% extends "assets/base.html" %}
+{% block content %}
+    <div class="container">
+        <p>hello world</p>
+        {% if user.is_authenticated %}
+            <table>
+                <tr>
+                    <th>Asset Type</th>
+                    <th>Asset Name</th>
+                    <th>Current Owner</th>
+                </tr>
+                    {% for asset in assets %}
+                    <tr>
+                        <td>{{ asset.asset_type }}</td>
+                        <td>{{ asset.asset_name }}</td>
+                        <td>{{ asset.currentOwner }}</td>
+                    </tr>
+                    {% endfor %}
+            </table>
+        {% else %}
+            <p>You are not logged in!</p>
+        {% endif %}
+        
+        
+    </div>
+{% endblock content%}
