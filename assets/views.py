@@ -14,12 +14,22 @@ from django.contrib import messages
 # Create your views here.
 
 @login_required
-def home(request):
+def assets(request):
     # user = request.user
     # print(user)
     asset_o = asset.objects.filter(currentOwner=request.user)
     context = {
         'assets': asset_o.all(),
+    }
+    return render(request, 'assets/asset.html', context)
+
+# @login_required
+def home(request):
+    # user = request.user
+    # print(user)
+    # asset_o = asset.objects.filter(currentOwner=request.user)
+    context = {
+        # 'assets': asset_o.all(),
     }
     return render(request, 'assets/home.html', context)
 

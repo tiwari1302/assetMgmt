@@ -5,5 +5,5 @@ app_name = 'assets'
 
 urlpatterns = [
     # path('home/', home, name='home'),
-    path('', home, name='home'),
+    # path('', home, name='home'),
 ]
