@@ -1,10 +1,14 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
-from .models import assetType, asset
+from .models import assetType, asset, User, User_manager
 
-# admin.site.register(assetType)
 # admin.site.register(asset)
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ("username", "gender")
+    list_filter = ("is_superuser",)
 
 @admin.register(assetType)
 class AssetTypeAdmin(admin.ModelAdmin):
