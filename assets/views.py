@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 # from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import asset, assetType, User
-from .forms import UserRegisterForm, UserUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm, createAssetForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse_lazy, reverse
@@ -19,6 +19,28 @@ def adminAssetView(request):
         'assets': asset.objects.all(),
     }
     return render(request, 'assets/assetAdmin.html', context)
+
+# @user_passes_test(lambda u: u.is_superuser)
+# def adminAssetView(request):
+#     context = {
+#         'assets': asset.objects.all(),
+#     }
+#     return render(request, 'assets/assetAdmin.html', context)
+
+@user_passes_test(lambda u: u.is_superuser)
+def createAssetView(request):
+    form = createAssetForm(request.POST)
+    if form.is_valid():
+        print("form valid")
+    context = {
+
+    }
+    context['form'] = createAssetForm
+
+        # form.save()
+        # asset.save()
+    
+    return render(request, 'assets/createAsset.html', context)
 
 # @login_required
 @user_passes_test(lambda u: u.is_active)
