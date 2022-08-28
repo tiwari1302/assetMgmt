@@ -1,0 +1,21 @@
+{% extends "assets/base.html" %}
+{% block content %}
+    <div class="container">
+        <p>Hello {{ request.user }}</p>
+    </br>
+            <table class="table">
+                <tr>
+                    <th>Asset Type</th>
+                    <th>Asset Name</th>
+                    <th>Current Owner</th>
+                </tr>
+                    {% for asset in assets %}
+                    <tr>
+                        <td>{{ asset.asset_type }}</td>
+                        <td>{{ asset.asset_name }}</td>
+                        <td>{{ asset.currentOwner }}</td>
+                    </tr>
+                    {% endfor %}
+            </table>    
+    </div>
+{% endblock content%}

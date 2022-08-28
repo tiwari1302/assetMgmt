@@ -1,7 +1,7 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, RedirectView
 from django.shortcuts import render, get_object_or_404
 # from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import asset, assetType, User
 from .forms import UserRegisterForm, UserUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -13,7 +13,15 @@ from django.contrib import messages
 
 # Create your views here.
 
-@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def adminAssetView(request):
+    context = {
+        'assets': asset.objects.all(),
+    }
+    return render(request, 'assets/assetAdmin.html', context)
+
+# @login_required
+@user_passes_test(lambda u: u.is_active)
 def assets(request):
     # user = request.user
     # print(user)
@@ -65,8 +73,5 @@ def profile(request):
         # 'p_form': p_form,
     }
     return render(request, 'assets/profile.html', context)
-# class AssetTypeListView(ListView):
-#     model = assetType
-#     template_name = ''
-#     context_object_name = 'types'
-#     paginate_by = 5
+
+
