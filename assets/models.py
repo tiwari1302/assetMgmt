@@ -51,11 +51,11 @@ class assetType(models.Model):
         verbose_name_plural = 'Asset Types'
 
 class asset(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    asset_type = models.ForeignKey('assetType', on_delete=models.CASCADE)
-    asset_name = models.CharField(max_length=30, unique=True)
-    location = models.CharField(max_length=30)
-    brand = models.CharField(max_length=30)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, null=False)
+    asset_type = models.ForeignKey('assetType', on_delete=models.CASCADE, null=True)
+    asset_name = models.CharField(max_length=30, unique=True, null=True)
+    location = models.CharField(max_length=30, null=True)
+    brand = models.CharField(max_length=30, null=True)
     purchase_year = models.PositiveIntegerField(blank=True, null=True)
-    isActive = models.BooleanField(default=True)
-    currentOwner = models.ForeignKey(User, default='', on_delete=models.CASCADE)
+    isActive = models.BooleanField(default=True, null=True)
+    currentOwner = models.ForeignKey(User, default='', null=True, on_delete=models.CASCADE)

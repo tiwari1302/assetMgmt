@@ -19,7 +19,7 @@ class UserUpdateForm(forms.ModelForm):
 
 class createAssetForm(forms.Form):
     model = asset
-    asset_type = forms.CharField(max_length = 20)
+    asset_type = forms.ChoiceField(choices=assetType.objects.all())
     asset_name = forms.CharField(max_length = 30)
     location = forms.CharField(max_length = 30)
     brand = forms.CharField(max_length = 30)

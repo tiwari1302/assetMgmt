@@ -20,26 +20,41 @@ def adminAssetView(request):
     }
     return render(request, 'assets/assetAdmin.html', context)
 
-# @user_passes_test(lambda u: u.is_superuser)
-# def adminAssetView(request):
-#     context = {
-#         'assets': asset.objects.all(),
-#     }
-#     return render(request, 'assets/assetAdmin.html', context)
-
 @user_passes_test(lambda u: u.is_superuser)
 def createAssetView(request):
-    form = createAssetForm(request.POST)
-    if form.is_valid():
-        print("form valid")
-    context = {
+    # form = createAssetForm(request.POST)
+    # if form.is_valid():
+    #     print("form valid")
+    # context = {
 
+    # }
+    # context['form'] = createAssetForm
+    assetTypeList = assetType.objects.all()  # use assetType.title
+    assettype = request.POST.get('asset-type')
+    assetname = request.POST.get('asset-name')
+    locationn = request.POST.get('location')
+    brandd = request.POST.get('brand')
+    purchaseyear = request.POST.get('purchase-year')
+    isActivve = request.POST.get('is-active')
+    context={
+        "cuser":request.user,
+        "asset_type_list":assetTypeList,
+        "asset_type":assettype,
+        "asset_name":assetname,
+        "location":locationn,
+        "brand":brandd,
+        "purchase_year":purchaseyear,
+        "is_active":isActivve,
     }
-    context['form'] = createAssetForm
-
-        # form.save()
-        # asset.save()
-    
+    if request.method == 'POST':
+        new_asset = asset()
+        new_asset.asset_type_title=assettype
+        new_asset.asset_name=assetname
+        new_asset.location=locationn
+        new_asset.brand=brandd
+        new_asset.purchase_year=purchaseyear
+        new_asset.isActive=isActivve
+        new_asset.save()
     return render(request, 'assets/createAsset.html', context)
 
 # @login_required
