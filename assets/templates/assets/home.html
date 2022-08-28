@@ -2,7 +2,7 @@
 {% block content %}
     <div class="container">
         {% if user.is_authenticated %}
-            <p>Hello {{ request.user }}</p>
+        <legend class="border-bottom mb-4">Hello {{ request.user }}</legend>
             <a href="{% url 'assets' %}">Your assets</a>
         {% else %}
             <p>You are not logged in!</p>

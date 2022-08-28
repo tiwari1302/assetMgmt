@@ -1,18 +1,20 @@
 {% extends "assets/base.html" %}
 {% block content %}
     <div class="container">
-        <p>Hello {{ request.user }}</p>
+        <legend class="border-bottom mb-4">Hello {{ request.user }}</legend>
     </br>
             <table class="table">
                 <tr>
                     <th>Asset Type</th>
                     <th>Asset Name</th>
+                    <th>Brand</th>
                     <!-- <th>Current Owner</th> -->
                 </tr>
                     {% for asset in assets %}
                     <tr>
                         <td>{{ asset.asset_type }}</td>
                         <td>{{ asset.asset_name }}</td>
+                        <td>{{ asset.brand }}</td>
                         <!-- <td>{{ asset.currentOwner }}</td> -->
                     </tr>
                     {% endfor %}
