@@ -44,7 +44,8 @@ def createAssetView(request):
         "location":locationn,
         "brand":brandd,
         "purchase_year":purchaseyear,
-        "is_active":isActivve,
+        "isActive":isActivve,
+        'iterator':range(2014,2050)
     }
     if request.method == 'POST':
         new_asset = asset()

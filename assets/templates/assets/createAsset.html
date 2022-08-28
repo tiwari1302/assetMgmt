@@ -12,7 +12,7 @@
                     <div class="form-group col-md-6">
                       <label for="asset-type">Asset Type</label>
                       <br>
-                      <select class="form-group form-control col-md-8" name="asset-type" id="asset-type">
+                      <select required class="form-group form-control col-md-8" name="asset-type" id="asset-type">
                         <option  value="" selected="selected">--- SELECT ASSET TYPE ---</option>
                         {% for type in asset_type_list %}
                             <option value="{{type.title}}">
@@ -37,13 +37,21 @@
                     </div>
                     <div class="form-group col-md-4">
                       <label for="purchase_year">Purchase Year</label>
-                      <input required type="number"  min="1900" max="2099" step="1" class="form-control" id="purchase_year" name="purchase_year" value="">
+                      <br>
+                      <select class="form-control form-group col-md-12" id="purchase_year" name="purchase_year" value="">
+                        {% for i in iterator %}
+                            <option>
+                                {{i}}
+                            </option>
+                        {% endfor %}
+                      </select>
+                      <!-- <input required type="number"  min="1900" max="2099" step="1" class="form-control" id="purchase_year" name="purchase_year" value=""> -->
                     </div>
                   </div>
                   <div class="form-row">
                     <div>
                         <label for="purchase_year">Is Active?</label>
-                        <input required type="checkbox" id="is-active" name="is-active" value="">
+                        <input type="checkbox" id="is-active" name="is-active" value="">
                     </div>
                   </div>
             </fieldset>
