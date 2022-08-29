@@ -40,9 +40,9 @@ class User(PermissionsMixin, AbstractBaseUser):
 class assetType(models.Model):
     title = models.CharField(max_length=150)
 
-    @property
-    def get_type(self):
-        return asset.objects.filter(asset_type=self.id)
+    # @property
+    # def get_type(self):
+    #     return asset.objects.filter(asset_type=self.id)
 
     def __str__(self):
         return f"{self.title}"
@@ -53,9 +53,9 @@ class assetType(models.Model):
 class asset(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, null=False)
     asset_type = models.ForeignKey('assetType', on_delete=models.CASCADE, null=True)
-    asset_name = models.CharField(max_length=30, unique=True, null=True)
+    asset_name = models.CharField(max_length=30, null=True) #unique=True
     location = models.CharField(max_length=30, null=True)
     brand = models.CharField(max_length=30, null=True)
     purchase_year = models.PositiveIntegerField(blank=True, null=True)
     isActive = models.BooleanField(default=True, null=True)
-    currentOwner = models.ForeignKey(User, default='', null=True, on_delete=models.CASCADE)
+    currentOwner = models.ForeignKey(User, default='', null=False, on_delete=models.SET_DEFAULT) #User.objects.get(is_superuser=True).id
