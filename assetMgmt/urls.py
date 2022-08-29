@@ -16,13 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
-from assets.views import register, profile, assets, home, adminAssetView, createAssetView
+from assets.views import register, profile, assets, home, adminAssetView, createAssetView, assetUpdateView
 
 urlpatterns = [
     path('home/', home, name='home'),
     path('assets/', assets, name='assets'),
     path('assetAdmin/', adminAssetView, name='assetsAdmin'),
     path('createAsset/', createAssetView, name='createAssets'),
+    path('assetsupdate/<id>/', assetUpdateView.as_view(), name='asset-update'),
     path('register/', register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='assets/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='assets/logout.html'), name='logout'),
