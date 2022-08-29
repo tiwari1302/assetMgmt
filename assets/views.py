@@ -13,29 +13,28 @@ from django.contrib import messages
 
 # Create your views here.
 
+class SuperUserCheck(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_superuser
+
 @user_passes_test(lambda u: u.is_superuser)
 def adminAssetView(request):
     context = {
         'assets': asset.objects.all(),
+        'users':User.objects.all(),
     }
     return render(request, 'assets/assetAdmin.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
 def createAssetView(request):
-    # form = createAssetForm(request.POST)
-    # if form.is_valid():
-    #     print("form valid")
-    # context = {
-
-    # }
-    # context['form'] = createAssetForm
     assetTypeList = assetType.objects.all()  # use assetType.title
     assettype = request.POST.get('asset-type')
     assetname = request.POST.get('asset-name')
     locationn = request.POST.get('location')
     brandd = request.POST.get('brand')
     purchaseyear = request.POST.get('purchase-year')
-    isActivve = request.POST.get('is-active')
+    isActivve = request.POST.get('is-active','') == 'on'
+    cuser=request.user
     context={
         "cuser":request.user,
         "asset_type_list":assetTypeList,
@@ -49,33 +48,46 @@ def createAssetView(request):
     }
     if request.method == 'POST':
         new_asset = asset()
-        new_asset.asset_type_title=assettype
+        target_type = assetType.objects.get(title=assettype)
+        new_asset.asset_type = target_type
+        # new_asset.asset_type_title=request.POST.get('asset-type')
         new_asset.asset_name=assetname
         new_asset.location=locationn
         new_asset.brand=brandd
         new_asset.purchase_year=purchaseyear
-        new_asset.isActive=isActivve
+        new_asset.isActive=True if isActivve else False
+        new_asset.currentOwner=cuser
         new_asset.save()
+        return redirect('createAssets')
+    
     return render(request, 'assets/createAsset.html', context)
 
 # @login_required
 @user_passes_test(lambda u: u.is_active)
 def assets(request):
-    # user = request.user
-    # print(user)
     asset_o = asset.objects.filter(currentOwner=request.user)
     context = {
         'assets': asset_o.all(),
     }
     return render(request, 'assets/asset.html', context)
 
+class assetUpdateView(SuperUserCheck, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = asset
+    slug_url_kwarg = 'id'
+    slug_field = 'id'
+    fields = ['asset_name', 'asset_type', 'currentOwner']
+    template_name = 'assets/updateAsset.html'
+    success_url="../../assetAdmin"
+    # context_object_name = 'assets'
+    # slug_url_kwarg = "username"
+    # slug_field = "username"
+    # def form_valid(self, form):
+    #     return super().form_valid(form)
+
 # @login_required
 def home(request):
-    # user = request.user
-    # print(user)
-    # asset_o = asset.objects.filter(currentOwner=request.user)
     context = {
-        # 'assets': asset_o.all(),
+        
     }
     return render(request, 'assets/home.html', context)
 

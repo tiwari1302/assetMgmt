@@ -1,0 +1,14 @@
+{% extends 'assets/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Update Asset{% endblock %}
+
+{% block content %}
+<div class="content-section container">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy }} 
+        <br>
+        <input type="submit" name="sumbit">
+    </form>
+</div>
+{% endblock %}
