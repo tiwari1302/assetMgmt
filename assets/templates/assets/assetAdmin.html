@@ -1,23 +1,64 @@
 {% extends "assets/base.html" %}
 {% block content %}
-    <div class="container">
+    <div class="content-section container">
         <legend class="border-bottom mb-4">Hello {{ request.user }}</legend>
     </br>
-            <table class="table">
+            <table class="table" id="admin-asset-table">
                 <tr>
+                    <th>Asset ID</th>
                     <th>Asset Type</th>
                     <th>Asset Name</th>
                     <th>Brand</th>
-                    <th>Current Owner</th>
+                    <th>Is Active</th>
+                    <th>
+                        <select id="searchddl" onclick="searchOwner();">
+                            <option disabled="true" selected>-- Current Owner --</option>
+                                {% for user in users %}
+                                    <option value="{{asset.currentOwner}}">
+                                        {{user.username}}
+                                    </option>
+                                {% endfor %}
+                        </select>
+                    </th>
+                    <!-- <th>Current Owner</th> -->
                 </tr>
                     {% for asset in assets %}
                     <tr>
+                        <td><a href="{% url 'asset-update' id=asset.id%}">{{ asset.id }}</a></td>
                         <td>{{ asset.asset_type }}</td>
                         <td>{{ asset.asset_name }}</td>
                         <td>{{ asset.brand }}</td>
+                        <td>{{ asset.isActive }}</td>
                         <td>{{ asset.currentOwner }}</td>
                     </tr>
                     {% endfor %}
             </table>    
     </div>
+    <script type="text/javascript">
+        function searchOwner()
+        {
+            var input,table,tr,td,filter,i;
+            input=document.getElementById("searchddl");
+            filter=input.value.toUpperCase();
+            table=document.getElementById("admin-asset-table");
+            tr=table.getElementsByTagName("tr");
+            for(i=0; i<tr.length; i++)
+            {
+                td=tr[i].getElementsByTagName("td")[3];
+                if(td)
+                {
+                    displaydata=td.innerText;
+                    if(displaydata.toUpperCase().indexOf(filter)>-1)
+                    {
+                        tr[i].style.display="";
+                    }
+                    else
+                    {
+                        tr[i].style.display="none";
+                    }
+                }
+            }
+        }
+    </script>
+
 {% endblock content%}
