@@ -2,11 +2,11 @@
 {% block content %}
     <div class="container content-section">
         {% if user.is_authenticated %}
-        <legend class="border-bottom mb-4">Hello {{ request.user }}</legend>
-            <a href="{% url 'assets' %}">Your assets</a>
+        <legend class="">Hello {{ request.user }}</legend> 
+            <!-- <a href="{% url 'assets' %}">Your assets</a> -->
         {% else %}
             <p>You are not logged in!</p>
             <a href="{% url 'login' %}">Login Now</a>
         {% endif %}
-    </div>
+    </div> 
 {% endblock content%}

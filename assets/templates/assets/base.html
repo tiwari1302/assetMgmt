@@ -28,7 +28,7 @@
                     </button>
                         <div class="collapse navbar-collapse" id="navbarToggle">
                             <div class="navbar-nav mr-auto">
-                                <a class="nav-item nav-link active" href="{% url 'home' %}">Home</a>
+                                <!-- <a class="nav-item nav-link active" href="{% url 'home' %}">Home</a> -->
                             </div>
 
                             {% if user.is_authenticated %}
@@ -36,6 +36,7 @@
                                     <a class="nav-item nav-link active" href="{% url 'assetsAdmin' %}">All Assets</a>
                                     <a class="nav-item nav-link active" href="{% url 'createAssets' %}">Add Asset</a>
                                 {% endif %}
+                                <a class="nav-item nav-link active" href="{% url 'assets' %}">My assets</a>
                                 <a class="nav-item nav-link active" href="{% url 'profile' %}">Profile</a> 
                                 <a class="nav-item nav-link active" href="{% url 'logout' %}">Logout</a>
                                 {% else %}
