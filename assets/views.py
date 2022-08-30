@@ -10,6 +10,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from .filters import ListingFilter
 
 # Create your views here.
 
@@ -19,9 +20,18 @@ class SuperUserCheck(UserPassesTestMixin):
 
 @user_passes_test(lambda u: u.is_superuser)
 def adminAssetView(request):
+    assets = asset.objects.all()
+    assetTypes = assetType.objects.all()
+    users = User.objects.all()
+    asset_filter = ListingFilter(request.GET, queryset=assets)
+    
+    # print(type(assets))
+    # print(type(asset_filter.qs))
     context = {
-        'assets': asset.objects.all(),
-        'users':User.objects.all(),
+        'assets': assets,
+        'assetTypes': assetTypes,
+        'users':users,
+        'asset_filter':asset_filter,
     }
     return render(request, 'assets/assetAdmin.html', context)
 

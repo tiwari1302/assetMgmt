@@ -1,64 +1,60 @@
 {% extends "assets/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section container">
+    <div class="row mr-4 ml-4">
         <legend class="border-bottom mb-4">Hello {{ request.user }}</legend>
-    </br>
-            <table class="table" id="admin-asset-table">
-                <tr>
-                    <th>Asset ID</th>
-                    <th>Asset Type</th>
-                    <th>Asset Name</th>
-                    <th>Brand</th>
-                    <th>Is Active</th>
-                    <th>
-                        <select id="searchddl" onclick="searchOwner();">
-                            <option disabled="true" selected>-- Current Owner --</option>
-                                {% for user in users %}
-                                    <option value="{{asset.currentOwner}}">
-                                        {{user.username}}
-                                    </option>
-                                {% endfor %}
-                        </select>
-                    </th>
-                    <!-- <th>Current Owner</th> -->
-                </tr>
-                    {% for asset in assets %}
+        
+        <div class="col-md-9">
+            <div class="content-section" style="overflow-x:auto;">
+            
+            </br>
+                <table class="table responsive">
                     <tr>
-                        <td><a href="{% url 'asset-update' id=asset.id%}">{{ asset.id }}</a></td>
-                        <td>{{ asset.asset_type }}</td>
-                        <td>{{ asset.asset_name }}</td>
-                        <td>{{ asset.brand }}</td>
-                        <td>{{ asset.isActive }}</td>
-                        <td>{{ asset.currentOwner }}</td>
+                        <th>Asset ID</th>
+                        <th>Asset Type</th>
+                        <th>Asset Name</th>
+                        <th>Brand</th>
+                        <th>Is Active</th>
+                        <th>Current Owner</th>
                     </tr>
-                    {% endfor %}
-            </table>    
-    </div>
-    <script type="text/javascript">
-        function searchOwner()
-        {
-            var input,table,tr,td,filter,i;
-            input=document.getElementById("searchddl");
-            filter=input.value.toUpperCase();
-            table=document.getElementById("admin-asset-table");
-            tr=table.getElementsByTagName("tr");
-            for(i=0; i<tr.length; i++)
-            {
-                td=tr[i].getElementsByTagName("td")[3];
-                if(td)
-                {
-                    displaydata=td.innerText;
-                    if(displaydata.toUpperCase().indexOf(filter)>-1)
-                    {
-                        tr[i].style.display="";
-                    }
-                    else
-                    {
-                        tr[i].style.display="none";
-                    }
-                }
-            }
-        }
-    </script>
+                        {% for asset in asset_filter.qs %}
+                        <tr>
+                            <td><a href="{% url 'asset-update' id=asset.id%}">{{ asset.id }}</a></td>
+                            <td>{{ asset.asset_type }}</td>
+                            <td>{{ asset.asset_name }}</td>
+                            <td>{{ asset.brand }}</td>
+                            <td>{{ asset.isActive }}</td>
+                            <td>{{ asset.currentOwner }}</td>
+                        </tr>
+                        {% endfor %}
+                </table>    
+            </div>
+        </div>
 
+        <div class="mb-4">
+            <div class="col-md-3">
+                <h4>Filters</h4>
+                <!-- <p>By type</p>
+                <ul>
+                    <li class="selected"><a href="?">All</a></li>
+                    {% for assetType in assetTypes %}
+                        <li><a href="?asset_type={{ assetType.id }}">{{ assetType.title }}</a></li>
+                    {% endfor %}
+                </ul>
+                <br>
+                <p>By current owner</p>
+                <ul>
+                    <li class="selected"><a href="?">All</a></li>
+                    {% for user in users %}
+                        <li><a href="?currentOwner={{ user.id }}">{{ user.username }}</a></li>
+                    {% endfor %}
+                </ul> -->
+                <form method="get">
+                    {{ asset_filter.form.as_p }}
+                    <button class="btn btn-sm btn-primary">Filter</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
 {% endblock content%}
