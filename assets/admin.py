@@ -7,12 +7,12 @@ from .models import assetType, asset, User, User_manager
 # admin.site.register(asset)
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ("username", "gender")
+    list_display = ("id", "username", "gender")
     list_filter = ("is_superuser",)
 
 @admin.register(assetType)
 class AssetTypeAdmin(admin.ModelAdmin):
-    list_display = ("title", )
+    list_display = ("title",)
 
 @admin.register(asset)
 class AssetAdmin(admin.ModelAdmin):
