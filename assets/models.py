@@ -50,6 +50,12 @@ class assetType(models.Model):
     class Meta:
         verbose_name_plural = 'Asset Types'
 
+def get_superuser():
+    su_user = User.objects.filter(is_superuser=True).first()
+    if su_user:
+        return su_user.pk
+    raise DoesNotExist('Please add Super User')
+
 class asset(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, null=False)
     asset_type = models.ForeignKey('assetType', on_delete=models.CASCADE, null=True)
@@ -58,4 +64,4 @@ class asset(models.Model):
     brand = models.CharField(max_length=30, null=True)
     purchase_year = models.PositiveIntegerField(blank=True, null=True)
     isActive = models.BooleanField(default=True, null=True)
-    currentOwner = models.ForeignKey(User, default='', null=False, on_delete=models.SET_DEFAULT) #User.objects.get(is_superuser=True).id
+    currentOwner = models.ForeignKey(User, default=get_superuser, null=False, on_delete=models.SET_DEFAULT) #User.objects.get(is_superuser=True).id
