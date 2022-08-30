@@ -19,6 +19,7 @@ from django.urls import path, include
 from assets.views import register, profile, assets, home, adminAssetView, createAssetView, assetUpdateView
 
 urlpatterns = [
+    path('', home, name='home'),
     path('home/', home, name='home'),
     path('assets/', assets, name='assets'),
     path('assetAdmin/', adminAssetView, name='assetsAdmin'),
