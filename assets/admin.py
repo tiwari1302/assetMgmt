@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
-from .models import assetType, asset, User, User_manager
+from .models import assetType, asset, User, User_manager, Transaction
 
 # admin.site.register(asset)
 @admin.register(User)
@@ -18,3 +18,7 @@ class AssetTypeAdmin(admin.ModelAdmin):
 class AssetAdmin(admin.ModelAdmin):
     list_display = ("id", "asset_name", "asset_type", "brand", "isActive", "currentOwner")
     list_filter = ("asset_type", "currentOwner")
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'transferredAsset', 'oldOwner', 'newOwner', 'timestamp')

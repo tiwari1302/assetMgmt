@@ -65,3 +65,9 @@ class asset(models.Model):
     purchase_year = models.PositiveIntegerField(blank=True, null=True)
     isActive = models.BooleanField(default=True, null=True)
     currentOwner = models.ForeignKey(User, default=get_superuser, null=False, on_delete=models.SET_DEFAULT) #User.objects.get(is_superuser=True).id
+
+class Transaction(models.Model):
+    transferredAsset = models.ForeignKey(asset, null=True, blank=True, on_delete=models.CASCADE)
+    oldOwner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="oldOwnerName")
+    newOwner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="newOwnerName")
+    timestamp = models.DateTimeField(auto_now_add=True, blank=True)
