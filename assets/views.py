@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 # from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import asset, assetType, User, Transaction
-from .forms import UserRegisterForm, UserUpdateForm, createAssetForm, updateAssetForm
+from .forms import UserRegisterForm, UserUpdateForm, createAssetForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse_lazy, reverse
