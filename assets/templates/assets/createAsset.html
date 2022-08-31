@@ -9,10 +9,10 @@
             <legend class="border-bottom mb-4">Add new asset</legend>
             <fieldset class="form-group">
                 <div class="form-row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                       <label for="asset-type">Asset Type</label>
                       <br>
-                      <select required class="form-group form-control col-md-8" name="asset-type" id="asset-type">
+                      <select required class="form-group form-control" name="asset-type" id="asset-type">
                         <option value="" selected="selected">--- SELECT ASSET TYPE ---</option>
                         {% for type in asset_type_list %}
                             <option value="{{type.title}}">
@@ -21,7 +21,7 @@
                         {% endfor %}
                       </select>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                       <label for="asset-name">Asset Name</label>
                       <input required type="text" class="form-control" id="asset-name" name="asset-name" value="">
                     </div>
@@ -48,10 +48,12 @@
                     </div>
                   </div>
                   <div class="form-row">
-                    <div>
+                    <div class="col-md-4">
                         <label for="is-active">Is Active?</label>
-                        <input type="checkbox" id="is-active" name="is-active" value="on"> 
-                        <!-- {{isActive}} -->
+                        <select required class="form-group form-control" name="is-active" id="is-active">
+                          <option>True</option>
+                          <option>False</option>
+                        </select>
                     </div>
                   </div>
             </fieldset>
