@@ -2,8 +2,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.shortcuts import render, get_object_or_404
 # from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import asset, assetType, User
-from .forms import UserRegisterForm, UserUpdateForm, createAssetForm
+from .models import asset, assetType, User, Transaction
+from .forms import UserRegisterForm, UserUpdateForm, createAssetForm, updateAssetForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse_lazy, reverse
@@ -36,6 +36,15 @@ def adminAssetView(request):
     return render(request, 'assets/assetAdmin.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
+def transactionsView(request):
+    context = {}
+ 
+    # add the dictionary during initialization
+    context["transactions"] = Transaction.objects.all()
+         
+    return render(request, "assets/transactions.html", context)
+
+@user_passes_test(lambda u: u.is_superuser)
 def createAssetView(request):
     assetTypeList = assetType.objects.all()  # use assetType.title
     assettype = request.POST.get('asset-type')
@@ -43,7 +52,7 @@ def createAssetView(request):
     locationn = request.POST.get('location')
     brandd = request.POST.get('brand')
     purchaseyear = request.POST.get('purchase-year')
-    isActivve = request.POST.get('is-active','') == 'on'
+    isActivve = request.POST.get('is-active') == 'Yes'
     cuser=request.user
     context={
         "cuser":request.user,
@@ -54,7 +63,7 @@ def createAssetView(request):
         "brand":brandd,
         "purchase_year":purchaseyear,
         "isActive":isActivve,
-        'iterator':range(2014,2050)
+        'iterator':range(2014,2030)
     }
     if request.method == 'POST':
         new_asset = asset()
@@ -81,18 +90,78 @@ def assets(request):
     }
     return render(request, 'assets/asset.html', context)
 
-class assetUpdateView(SuperUserCheck, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = asset
-    slug_url_kwarg = 'id'
-    slug_field = 'id'
-    fields = ['asset_name', 'asset_type', 'currentOwner']
-    template_name = 'assets/updateAsset.html'
-    success_url="../../assetAdmin"
-    # context_object_name = 'assets'
-    # slug_url_kwarg = "username"
-    # slug_field = "username"
-    # def form_valid(self, form):
-    #     return super().form_valid(form)
+@user_passes_test(lambda u: u.is_superuser)
+def assetUpdateView(request, id):
+
+    obj = get_object_or_404(asset, id=id)
+    users = User.objects.all()
+    assetTypeList = assetType.objects.all()
+    oldOwner = obj.currentOwner
+    oldType = obj.asset_type
+    
+    if request.method=='POST':
+        
+        newType = assetType.objects.get(title=request.POST.get('asset-type'))
+        obj.asset_type = newType
+
+        obj.asset_name = request.POST.get('asset-name')
+        obj.location = request.POST.get('location')
+        obj.brand = request.POST.get('brand')
+        obj.purchase_year = request.POST.get('purchase_year')
+        obj.isActive = request.POST.get('is-active')
+        
+        newOwner = User.objects.get(username=request.POST.get('current_owner'))
+        obj.currentOwner = newOwner
+        
+        obj.save()
+        
+        new_transaction = Transaction(transferredAsset=obj, oldOwner=oldOwner, newOwner=newOwner)
+        new_transaction.save()
+        
+        return redirect('assetsAdmin')
+    context = {
+        # "form" : form,
+        "users": users,
+        "obj" : obj,
+        "asset_type_list":assetTypeList,
+        'iterator':range(2014,2030),
+    }
+    return render(request, "assets/updateAsset.html", context)
+
+# class assetUpdateView(SuperUserCheck, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+
+#     def __init__(self, **kwargs):
+#         # pass
+#         self.old_owner = None # super(assetUpdateView, self).get_context_data(**kwargs)['asset'].currentOwner
+
+#     def get_context_data(self, **kwargs):
+#        kwargs.setdefault('fun', self.fun())
+#        print("diwali")
+#     #    list = [super().get_context_data(**kwargs), old_owner]
+#        self.old_owner = super().get_context_data(**kwargs)['asset'].currentOwner   # type dictionary
+#        return (super().get_context_data(**kwargs))
+    
+#     def fun(self):
+#         print("hello", self.old_owner)
+#     model = asset
+#     slug_url_kwarg = 'id'
+#     slug_field = 'id'
+#     fields = ['asset_name', 'asset_type', 'currentOwner']
+#     template_name = 'assets/updateAsset.html'
+#     success_url="../../assetAdmin"
+#     print("bahar se print")
+#     # old_owner = asset.objects.get(currentOwner=old_owner).currentOwner
+
+
+
+#         # new_transaction = Transaction(
+#         #     assetTransferred=asset.asset_name,
+#         #     oldOwner = asset.objects.get(currentOwner=self.old_owner).currentOwner,
+#         #     newOwner = asset.currentOwner,
+#         # )
+
+#     #     new_transaction.save()
+
 
 # @login_required
 def home(request):
