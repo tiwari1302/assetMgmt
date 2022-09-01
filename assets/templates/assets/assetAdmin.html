@@ -1,15 +1,28 @@
 {% extends "assets/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+
+<form method="POST">
+    {% csrf_token %}
     <div class="row mr-4 ml-4">
-        <legend class="border-bottom mb-4">Hello {{ request.user }}</legend>
-        
-        <div class="col-md-9">
+        <div class="col-md-10">
             <div class="content-section" style="overflow-x:auto;">
-            
-            </br>
-                <table class="table responsive">
+                <div class="container">
+                    <legend class="mb-3">Hello {{ request.user }}
+                        <a style = "position:absolute; right:50px;" class="mb-4 btn btn-secondary" href="{% url 'createAssets' %}">Add Asset</a>
+                    </legend>
+                </div>
+                <div class="mb-4 ml-3">
+                    Action:
+                    <select class="ml-2" name="action" value="">
+                        <option> ------ </option>
+                        <option>Delete selected asset(s)</option>
+                    </select>
+                    <button class="ml-2 btn btn-sm btn-danger" type="submit">Go</button>
+                </div>
+                <table class="table table-condensed table-hover responsive">
                     <tr>
+                        <th>Select</th>
                         <th>Asset ID</th>
                         <th>Asset Type</th>
                         <th>Asset Name</th>
@@ -19,54 +32,33 @@
                     </tr>
                         {% for asset in asset_filter.qs %}
                         <tr>
+                            <td>
+                                <div class="form-group form-check">
+                                    <input type="checkbox" name="assetList[]" class="form-check-input" value="{{ asset.pk }}">
+                                    <label class="form-check-label"></label>
+                                </div>
+                            </td>
                             <td><a href="{% url 'asset-update' id=asset.id%}">{{ asset.id }}</a></td>
                             <td>{{ asset.asset_type }}</td>
                             <td>{{ asset.asset_name }}</td>
                             <td>{{ asset.brand }}</td>
                             <td>{{ asset.isActive }}</td>
                             <td>{{ asset.currentOwner }}</td>
-                            <!-- <td>
-                                <form>
-                                    <select>
-                                        {for}    
-                                        <option>
-                                            names
-                                        </option>        
-                                        {endfor}
-                                    </select>
-                                    <input type="hidden" value="{{asset.id}}">
-                                </form>
-                            </td> -->
                         </tr>
                         {% endfor %}
                 </table>    
             </div>
         </div>
-
-        <div class="mb-4">
-            <div class="col-md-3">
+    </form>
+        <!-- <div class=""> -->
+            <div class="col-md-2 mb-4">
                 <h4>Filters</h4>
-                <!-- <p>By type</p>
-                <ul>
-                    <li class="selected"><a href="?">All</a></li>
-                    {% for assetType in assetTypes %}
-                        <li><a href="?asset_type={{ assetType.id }}">{{ assetType.title }}</a></li>
-                    {% endfor %}
-                </ul>
-                <br>
-                <p>By current owner</p>
-                <ul>
-                    <li class="selected"><a href="?">All</a></li>
-                    {% for user in users %}
-                        <li><a href="?currentOwner={{ user.id }}">{{ user.username }}</a></li>
-                    {% endfor %}
-                </ul> -->
                 <form method="get">
-                    {{ asset_filter.form.as_p }}
-                    <button class="btn btn-sm btn-primary">Filter</button>
+                    {{ asset_filter.form|crispy }}
+                    <button class="btn btn-sm btn-primary mt-2">Filter</button>
                 </form>
             </div>
-        </div>
+        <!-- </div> -->
 
     </div>
 {% endblock content%}

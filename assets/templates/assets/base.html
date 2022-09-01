@@ -35,7 +35,7 @@
                                 {% if request.user.is_superuser %}
                                     <a class="nav-item nav-link active" href="{% url 'transactions' %}">Transactions</a>
                                     <a class="nav-item nav-link active" href="{% url 'assetsAdmin' %}">All Assets</a>
-                                    <a class="nav-item nav-link active" href="{% url 'createAssets' %}">Add Asset</a>
+                                    <a class="nav-item nav-link active" href="{% url 'asset-type-list' %}">Asset Types</a>
                                 {% endif %}
                                 <a class="nav-item nav-link active" href="{% url 'assets' %}">My assets</a>
                                 <a class="nav-item nav-link active" href="{% url 'profile' %}">Profile</a> 

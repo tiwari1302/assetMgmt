@@ -1,23 +1,32 @@
 {% extends "assets/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="content-section container style="overflow-x:auto;">
-    <table class="table">
-        <tr>
-            <th>Transaction ID</th>
-            <th>Asset ID</th>
-            <th>Old Owner</th>
-            <th>New Owner</th>
-            <th>Timestamp</th>
-        </tr>
-    {% for transaction in transactions %}
-        <tr>
-            <td>{{ transaction.id }}</td>
-            <td>{{ transaction.transferredAsset }}</td>
-            <td>{{ transaction.oldOwner }}</td>
-            <td>{{ transaction.newOwner }}</td>
-            <td>{{ transaction.timestamp }}</td>
-        </tr>
-    {% endfor %}
-</div>
+    <div class="row mr-4 ml-4">
+        <div class="col-md-12">
+            <div class="content-section container">
+                <legend class="border-bottom container mb-4">Hello {{ request.user }}</legend>
+                <div style="overflow-x:auto;">
+                    <table class="table table-hover table-striped">
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Asset ID</th>
+                            <th>Old Owner</th>
+                            <th>New Owner</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.id }}</td>
+                            <td>{{ transaction.transferredAsset }}</td>
+                            <td>{{ transaction.oldOwner }}</td>
+                            <td>{{ transaction.newOwner }}</td>
+                            <td>{{ transaction.timestamp }}</td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock content %}

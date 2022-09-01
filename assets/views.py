@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 # from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import asset, assetType, User, Transaction
-from .forms import UserRegisterForm, UserUpdateForm, createAssetForm
+from .forms import UserRegisterForm, UserUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse_lazy, reverse
@@ -13,6 +13,28 @@ from django.contrib import messages
 from .filters import ListingFilter
 
 # Create your views here.
+
+def testView(request):
+    assets = asset.objects.all()
+    
+    brandList = []
+    typeList = []
+    locationList = []
+    purchaseYearList = []
+    for a in assets:
+        brandList.append(a.brand)
+        typeList.append(a.asset_type)
+        locationList.append(a.location)
+        purchaseYearList.append(a.purchase_year)
+    
+    context = {
+        'assets':assets,
+        'brandList':set(brandList),
+        'typeList':set(typeList),
+        'purchaseYearList':set(purchaseYearList),
+        
+    }
+    return render(request, 'assets/test.html', context)
 
 class SuperUserCheck(UserPassesTestMixin):
     def test_func(self):
@@ -33,6 +55,17 @@ def adminAssetView(request):
         'users':users,
         'asset_filter':asset_filter,
     }
+
+    action = request.POST.get('action')
+    if action == "Delete selected asset(s)":
+        # print("if statement working")
+        assetList = request.POST.getlist('assetList[]') # returning id of assetType in list
+        for t in assetList:
+            obj = asset.objects.filter(id=t)
+            obj.delete()
+        
+        # pass
+        return redirect('assetsAdmin')
     return render(request, 'assets/assetAdmin.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -43,6 +76,48 @@ def transactionsView(request):
     context["transactions"] = Transaction.objects.all()
          
     return render(request, "assets/transactions.html", context)
+
+class AssetTypeCreateView(CreateView, LoginRequiredMixin, SuperUserCheck):
+    model = assetType
+    fields = ['title']
+    success_url="../../assetTypes"
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+def AssetTypeUpdateView(request, pk):
+    obj = get_object_or_404(assetType, id=pk)
+    oldTitle = obj.title
+
+    if request.method=='POST':
+        obj.title=request.POST.get('title')
+        obj.save()
+        return redirect('asset-type-list')
+
+    context = {
+        'obj' : obj,
+    }
+
+    return render(request, "assets/assetType_update.html", context)
+
+@user_passes_test(lambda u: u.is_superuser)
+def AssetTypeListView(request):
+    types = assetType.objects.all()
+    context = {
+        'types' : types,
+    }
+
+    action = request.POST.get('action')
+    if action == "Delete selected type(s)":
+        # print("if statement working")
+        assetTypeList = request.POST.getlist('typeList[]') # returning id of assetType in list
+        for t in assetTypeList:
+            obj = assetType.objects.filter(id=t)
+            obj.delete()
+        
+        # pass
+        return redirect('asset-type-list')
+
+    return render(request, "assets/asset_types.html", context)
 
 @user_passes_test(lambda u: u.is_superuser)
 def createAssetView(request):
@@ -77,7 +152,7 @@ def createAssetView(request):
         new_asset.isActive=True if isActivve else False
         new_asset.currentOwner=cuser
         new_asset.save()
-        return redirect('createAssets')
+        return redirect('assetsAdmin')
     
     return render(request, 'assets/createAsset.html', context)
 
@@ -114,9 +189,9 @@ def assetUpdateView(request, id):
         obj.currentOwner = newOwner
         
         obj.save()
-        
-        new_transaction = Transaction(transferredAsset=obj, oldOwner=oldOwner, newOwner=newOwner)
-        new_transaction.save()
+        if oldOwner != newOwner:
+            new_transaction = Transaction(transferredAsset=obj, oldOwner=oldOwner, newOwner=newOwner)
+            new_transaction.save()
         
         return redirect('assetsAdmin')
     context = {
@@ -127,40 +202,6 @@ def assetUpdateView(request, id):
         'iterator':range(2014,2030),
     }
     return render(request, "assets/updateAsset.html", context)
-
-# class assetUpdateView(SuperUserCheck, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-
-#     def __init__(self, **kwargs):
-#         # pass
-#         self.old_owner = None # super(assetUpdateView, self).get_context_data(**kwargs)['asset'].currentOwner
-
-#     def get_context_data(self, **kwargs):
-#        kwargs.setdefault('fun', self.fun())
-#        print("diwali")
-#     #    list = [super().get_context_data(**kwargs), old_owner]
-#        self.old_owner = super().get_context_data(**kwargs)['asset'].currentOwner   # type dictionary
-#        return (super().get_context_data(**kwargs))
-    
-#     def fun(self):
-#         print("hello", self.old_owner)
-#     model = asset
-#     slug_url_kwarg = 'id'
-#     slug_field = 'id'
-#     fields = ['asset_name', 'asset_type', 'currentOwner']
-#     template_name = 'assets/updateAsset.html'
-#     success_url="../../assetAdmin"
-#     print("bahar se print")
-#     # old_owner = asset.objects.get(currentOwner=old_owner).currentOwner
-
-
-
-#         # new_transaction = Transaction(
-#         #     assetTransferred=asset.asset_name,
-#         #     oldOwner = asset.objects.get(currentOwner=self.old_owner).currentOwner,
-#         #     newOwner = asset.currentOwner,
-#         # )
-
-#     #     new_transaction.save()
 
 
 # @login_required

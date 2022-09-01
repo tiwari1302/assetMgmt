@@ -12,7 +12,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(assetType)
 class AssetTypeAdmin(admin.ModelAdmin):
-    list_display = ("title",)
+    list_display = ("id", "title",)
 
 @admin.register(asset)
 class AssetAdmin(admin.ModelAdmin):

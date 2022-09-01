@@ -9,6 +9,7 @@ class ListingFilter(django_filters.FilterSet):
             'currentOwner': ['exact'],
             # 'brand': ['exact'],
             'asset_type': ['exact'],
+            # 'asActive' : ['exact'],   
         }
 
 # class TypeFilter(django_filters.FilterSet):
