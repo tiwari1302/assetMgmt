@@ -16,19 +16,26 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
-from assets.views import register, profile, assets, home, adminAssetView, createAssetView, assetUpdateView, transactionsView
+from assets.views import register, profile, assets, \
+                            home, adminAssetView, AssetTypeCreateView,\
+                            createAssetView, assetUpdateView, transactionsView, AssetTypeListView,\
+                            AssetTypeUpdateView, testView
 
 urlpatterns = [
     path('', home, name='home'),
     path('home/', home, name='home'),
     path('assets/', assets, name='assets'),
-    path('assetAdmin/', adminAssetView, name='assetsAdmin'),
+    path('assetsAdmin/', adminAssetView, name='assetsAdmin'),
     path('transactions/', transactionsView, name='transactions'),
+    path('assetTypes/', AssetTypeListView, name='asset-type-list'),
+    path('newAssetType/', AssetTypeCreateView.as_view(), name='asset-type-create'),
+    path('updateAssetType/<pk>/', AssetTypeUpdateView, name='asset-type-update'),
     path('createAsset/', createAssetView, name='createAssets'),
-    path('assetsupdate/<id>/', assetUpdateView, name='asset-update'),
+    path('assetUpdate/<id>/', assetUpdateView, name='asset-update'),
     path('register/', register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='assets/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='assets/logout.html'), name='logout'),
     path('accounts/profile/', profile, name='profile'),
     path('admin/', admin.site.urls),
+    path('test/', testView, name='test'),
 ]
