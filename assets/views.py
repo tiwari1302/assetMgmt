@@ -12,33 +12,117 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .filters import ListingFilter
 
-# Create your views here.
-
-def testView(request):
+@user_passes_test(lambda u: u.is_superuser)
+def testFilterView(request):
     assets = asset.objects.all()
-    
+    assetTypes = assetType.objects.all()
+    Users = User.objects.all()
+
     brandList = []
-    typeList = []
     locationList = []
     purchaseYearList = []
     for a in assets:
         brandList.append(a.brand)
-        typeList.append(a.asset_type)
         locationList.append(a.location)
         purchaseYearList.append(a.purchase_year)
-    
+
+    if request.method=="GET":
+        # print("get method working")
+        type_ = request.GET.get('type')
+        brand = request.GET.get('brand')
+        isActive = request.GET.get('isActive')
+        year = request.GET.get('year')
+        location = request.GET.get('location')
+        owner = request.GET.get('owner')
+        # print(owner)
+
+        if type_ != '' and type_ != None and type_ != 'Asset Type':
+            filter_type = list(assetType.objects.filter(title=type_).values('id'))
+            filter_type_id = filter_type[0].get("id")
+            assets=assets.filter(asset_type=filter_type_id)
+
+        if brand != '' and brand != None and brand != 'Brand':
+            assets=assets.filter(brand=brand)
+
+        if isActive != '' and isActive != None and isActive != 'isActive':
+            assets=assets.filter(isActive=isActive)
+
+        if year != '' and year != None and year != 'Purchase year':
+            assets=assets.filter(purchase_year=year)
+
+        if location != '' and location != None and location != 'Location':
+            assets=assets.filter(location=location)
+
+        if owner != '' and owner != None and owner != 'Owner':
+            filter_user = list(User.objects.filter(username=owner).values('id')) # 
+            filter_user_id = filter_user[0].get("id")   # returning query id
+            assets=assets.filter(currentOwner=filter_user_id)
+
     context = {
-        'assets':assets,
+        'queryset':assets,
         'brandList':set(brandList),
-        'typeList':set(typeList),
+        'typeList':assetType.objects.all(),
+        'locationList':set(locationList),
         'purchaseYearList':set(purchaseYearList),
-        
+        'ownerList':User.objects.all(),
     }
-    return render(request, 'assets/test.html', context)
+    return render(request, "assets/test.html", context)
 
 class SuperUserCheck(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_superuser
+
+def filterAssets(request, queryset):
+
+    # print("filter view working")
+    assets = asset.objects.all()
+    type_ = request.GET.get('type')
+    brand = request.GET.get('brand')
+    isActive = request.GET.get('isActive')
+    year = request.GET.get('year')
+    location = request.GET.get('location')
+    owner = request.GET.get('owner')
+    # print(type_, brand, isActive, year, location, owner)  all values reaching the function
+
+    if type_ != '' and type_ != None and type_ != 'Asset Type':
+        print("check")
+        filter_type = list(assetType.objects.filter(title=type_).values('id'))
+        filter_type_id = filter_type[0].get("id")
+        # print(filter_type_id)
+        assets=assets.filter(asset_type=filter_type_id)
+
+    if brand != '' and brand != None and brand != 'Brand':
+        print("check")
+        assets=assets.filter(brand=brand)
+
+    if isActive != '' and isActive != None and isActive != 'isActive':
+        print("check")
+        assets=assets.filter(isActive=isActive)
+
+    if year != '' and year != None and year != 'Purchase year':
+        print("check")
+        assets=assets.filter(purchase_year=year)
+
+    if location != '' and location != None and location != 'Location':
+        print("check")
+        assets=assets.filter(location=location)
+
+    if owner != '' and owner != None and owner != 'Owner':
+        print("check")
+        filter_user = list(User.objects.filter(username=owner).values('id')) # 
+        filter_user_id = filter_user[0].get("id")   # returning query id
+        assets=assets.filter(currentOwner=filter_user_id)
+
+    return (assets)
+
+def deleteAssets(request):
+    assetList = request.POST.getlist('assetList[]') # returning id of assetType in list
+    for t in assetList:
+        obj = asset.objects.filter(id=t)
+        obj.delete()
+            
+            # pass
+    return redirect('assetsAdmin')
 
 @user_passes_test(lambda u: u.is_superuser)
 def adminAssetView(request):
@@ -47,25 +131,33 @@ def adminAssetView(request):
     users = User.objects.all()
     asset_filter = ListingFilter(request.GET, queryset=assets)
     
-    # print(type(assets))
-    # print(type(asset_filter.qs))
+    brandList = []
+    locationList = []
+    purchaseYearList = []
+    for a in assets:
+        brandList.append(a.brand)
+        locationList.append(a.location)
+        purchaseYearList.append(a.purchase_year)
+    
+    if request.method=='GET':
+        # print("get works")
+        assets = filterAssets(request, assets)
+
+    if request.method=='POST':
+        action = request.POST.get('action')
+        if action == "Delete selected asset(s)":
+            deleteAssets(request)
+            
     context = {
         'assets': assets,
         'assetTypes': assetTypes,
+        'brandList':set(brandList),
+        'locationList':set(locationList),
+        'purchaseYearList':set(purchaseYearList),
         'users':users,
         'asset_filter':asset_filter,
     }
-
-    action = request.POST.get('action')
-    if action == "Delete selected asset(s)":
-        # print("if statement working")
-        assetList = request.POST.getlist('assetList[]') # returning id of assetType in list
-        for t in assetList:
-            obj = asset.objects.filter(id=t)
-            obj.delete()
-        
-        # pass
-        return redirect('assetsAdmin')
+    
     return render(request, 'assets/assetAdmin.html', context)
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -127,29 +219,22 @@ def createAssetView(request):
     locationn = request.POST.get('location')
     brandd = request.POST.get('brand')
     purchaseyear = request.POST.get('purchase-year')
-    isActivve = request.POST.get('is-active') == 'Yes'
+    isActivve = request.POST.get('is-active')
     cuser=request.user
     context={
         "cuser":request.user,
-        "asset_type_list":assetTypeList,
-        "asset_type":assettype,
-        "asset_name":assetname,
-        "location":locationn,
-        "brand":brandd,
-        "purchase_year":purchaseyear,
-        "isActive":isActivve,
-        'iterator':range(2014,2030)
+        "asset_type_list":assetType.objects.all(),
+        'iterator':range(2014,2030),
     }
     if request.method == 'POST':
         new_asset = asset()
         target_type = assetType.objects.get(title=assettype)
         new_asset.asset_type = target_type
-        # new_asset.asset_type_title=request.POST.get('asset-type')
         new_asset.asset_name=assetname
         new_asset.location=locationn
         new_asset.brand=brandd
         new_asset.purchase_year=purchaseyear
-        new_asset.isActive=True if isActivve else False
+        new_asset.isActive=isActivve
         new_asset.currentOwner=cuser
         new_asset.save()
         return redirect('assetsAdmin')
@@ -195,7 +280,6 @@ def assetUpdateView(request, id):
         
         return redirect('assetsAdmin')
     context = {
-        # "form" : form,
         "users": users,
         "obj" : obj,
         "asset_type_list":assetTypeList,
@@ -228,19 +312,16 @@ def register(request):
 def profile(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,request.FILES , instance=request.user.profile)
-        if u_form.is_valid() and p_form.is_valid():
+
+        if u_form.is_valid(): 
             u_form.save()
-            p_form.save()
             messages.success(request, f'Your account has been updated!')
             return redirect('profile')        
     else:
         u_form = UserUpdateForm(instance=request.user)
-        # p_form = ProfileUpdateForm(instance=request.user.profile)
 
     context = {
         'u_form': u_form,
-        # 'p_form': p_form,
     }
     return render(request, 'assets/profile.html', context)
 
