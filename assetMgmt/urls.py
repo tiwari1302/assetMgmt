@@ -19,7 +19,7 @@ from django.urls import path, include
 from assets.views import register, profile, assets, \
                             home, adminAssetView, AssetTypeCreateView,\
                             createAssetView, assetUpdateView, transactionsView, AssetTypeListView,\
-                            AssetTypeUpdateView, testView
+                            AssetTypeUpdateView, testFilterView
 
 urlpatterns = [
     path('', home, name='home'),
@@ -37,5 +37,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='assets/logout.html'), name='logout'),
     path('accounts/profile/', profile, name='profile'),
     path('admin/', admin.site.urls),
-    path('test/', testView, name='test'),
+    path('test/', testFilterView, name='test'),
 ]
