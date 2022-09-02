@@ -38,9 +38,9 @@
                     <div class="form-group col-md-4">
                       <label for="purchase_year">Purchase Year</label>
                       <br>
-                      <select required class="form-control form-group col-md-12" id="purchase_year" name="purchase_year" value="">
+                      <select required class="form-control form-group col-md-12" id="purchase_year" name="purchase-year">
                         {% for i in iterator %}
-                            <option>
+                            <option value="{{ i }}">
                                 {{i}}
                             </option>
                         {% endfor %}
