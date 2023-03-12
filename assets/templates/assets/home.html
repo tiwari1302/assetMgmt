@@ -1,0 +1,12 @@
+{% extends "assets/base.html" %}
+{% block content %}
+    <div class="container content-section">
+        {% if user.is_authenticated %}
+        <legend class="">Hello {{ request.user }}</legend> 
+            <!-- <a href="{% url 'assets' %}">Your assets</a> -->
+        {% else %}
+            <p>You are not logged in!</p>
+            <a href="{% url 'login' %}">Login Now</a>
+        {% endif %}
+    </div> 
+{% endblock content%}

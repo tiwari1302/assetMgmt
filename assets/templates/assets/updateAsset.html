@@ -1,0 +1,89 @@
+{% extends 'assets/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Update Asset{% endblock %}
+
+{% block content %}
+<div class="content-section container">
+    <form action="" method="post">
+        {% csrf_token %}
+        <legend class="border-bottom mb-4">Update asset</legend>
+            <fieldset class="form-group">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                      <label for="asset-type">Asset Type</label>
+                      <br>
+                      <select value="" required class="form-group form-control" name="asset-type" id="asset-type">
+                        <option selected="selected">{{ obj.asset_type.title }}</option>
+                        {% for type in asset_type_list %}
+                            <option value="{{type.title}}">
+                                {{type.title|capfirst}}
+                            </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="asset-name">Asset Name</label>
+                      <input required type="text" class="form-control" id="asset-name" name="asset-name" value="{{ obj.asset_name }}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                      <label for="location">Location</label>
+                      <input required type="text" class="form-control" id="location" name="location" value="{{ obj.location }}">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="brand">Brand</label>
+                      <input required type="text" class="form-control" id="brand" name="brand" value="{{ obj.brand }}">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="purchase_year">Purchase Year</label>
+                      <br>
+                      <select required class="form-control form-group col-md-12" id="purchase_year" name="purchase_year" value="{{ obj.purchase_year }}">
+                        <option selected>{{ obj.purchase_year }}</option>
+                        {% for i in iterator %}
+                            <option>
+                                {{i}}
+                            </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col-md-4">
+                        <label for="is-active">Is Active?</label>
+                        <select required class="form-group form-control" name="is-active" id="is-active" value="{{ obj.isActive }}">
+                          <option selected>{{ obj.isActive }}</option>
+                          {% if obj.isActive %}
+                            <option>False</option>
+                          {% else %}
+                            <option>True</option>
+                          {% endif %}
+                        </select>
+                        <!-- <input type="checkbox" id="is-active" name="is-active" value="{{ obj.isActive }}">  -->
+                        <!-- {{isActive}} -->
+                    </div>
+                    <div class="col-md-4">
+                        <label for="currentOwner">Current Owner</label>
+                        <br>
+                        <select value="{{ obj.currentowner }}" required class="form-group form-control" name="current_owner" id="asset-type">
+                          <option selected="selected"> {{ obj.currentOwner.username }} </option>
+                            {% for user in users %}
+                                <option value="{{user.username}}">
+                                    {{user.username}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                  </div>
+            </fieldset>
+            <!-- <input type="hidden" class="form-control" name="pdict" value="{{cuser}}"> -->
+            <input type="submit" value="Submit">
+    </form>
+    <!-- <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy }} 
+        <br>
+        <input type="submit" name="sumbit">
+    </form> -->
+</div>
+{% endblock %}

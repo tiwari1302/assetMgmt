@@ -1,0 +1,27 @@
+{% extends "assets/base.html" %}
+{% block content %}
+    <div class="content-section container"  style="overflow-x:auto;">
+        <legend class="border-bottom mb-4">Hello {{ request.user }}</legend>
+    </br>
+            <table class="table table-condensed table-hover responsive">
+                <tr>
+                    <th>Asset ID</th>
+                    <th>Asset Type</th>
+                    <th>Asset Name</th>
+                    <th>Brand</th>
+                    <th>Is Active</th>
+                    <!-- <th>Current Owner</th> -->
+                </tr>
+                    {% for asset in assets %}
+                    <tr>
+                        <td>{{ asset.id }}</td>
+                        <td>{{ asset.asset_type }}</td>
+                        <td>{{ asset.asset_name }}</td>
+                        <td>{{ asset.brand }}</td>
+                        <td>{{ asset.isActive }}</td>
+                        <!-- <td>{{ asset.currentOwner }}</td> -->
+                    </tr>
+                    {% endfor %}
+            </table>    
+    </div>
+{% endblock content%}

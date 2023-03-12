@@ -1,0 +1,109 @@
+{% extends "assets/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="row mr-4 ml-4">
+        <div class="col-md-12">
+
+                <div class="content-section" style="overflow-x:auto;">
+                    <div class="container">
+                        <legend class="mb-3">Hello {{ request.user }}
+                            <a style = "position:absolute; right:50px;" class="mb-4 btn btn-secondary" href="{% url 'createAssets' %}">Add Asset</a>
+                        </legend>
+                    </div>
+                    
+
+                    <form class="mt-2 mb-2 ml-3" method="get" action="">
+                        Filters: 
+                        <select class="ml-3" name="type">
+                            <option>Asset Type</option>
+                            {% for type in assetTypes %}
+                                <option value="{{ type }}" {% if type == '{{ type }}' %}selected{% endif %}>{{ type }}</option>
+                            {% endfor %}
+                        </select>
+        
+                        <select name="brand">
+                            <option>Brand</option>
+                            {% for brand in brandList %}
+                                <option value="{{ brand }}">{{ brand }}</option>
+                            {% endfor %}
+                        </select>
+        
+                        <select name="isActive">
+                            <option selected>isActive</option>
+                            <option value="True" >True</option>
+                            <option value="False">False</option>
+                        </select>
+        
+                        <select name="year">
+                            <option>Purchase year</option>
+                            {% for year in purchaseYearList %}
+                                <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                        </select>
+        
+                        <select name="location">
+                            <option>Location</option>
+                            {% for location in locationList %}
+                                <option value="{{ location }}">{{ location }}</option>
+                            {% endfor %}
+                        </select>
+        
+                        <select name="owner">
+                            <option>Owner</option>
+                            {% for owner in users %}
+                                <option value="{{ owner }}">{{ owner }}</option>
+                            {% endfor %}
+                        </select>
+        
+                        <button class="btn btn-sm btn-primary" type="submit">Filter</button>
+                    </form>
+
+                    <table class="table table-condensed table-hover responsive">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="mb-4 ml-3">
+                                Actions:
+                                <select class="ml-2" name="action" value="">
+                                    <option> ------ </option>
+                                    <option>Delete selected asset(s)</option>
+                                </select>
+                                <button class="ml-2 btn btn-sm btn-danger" type="submit">Go</button>
+                            </div>
+                        <tr>
+                            <th>Select</th>
+                            <th>Asset ID</th>
+                            <th>Asset Type</th>
+                            <th>Asset Name</th>
+                            <th>Brand</th>
+                            <th>Location</th>
+                            <th>Is Active</th>
+                            <th>Current Owner</th>
+                        </tr>
+                            {% for asset in assets %}
+                            <tr>
+                                <td>
+                                    <div class="form-group form-check">
+                                        <input type="checkbox" name="assetList[]" class="form-check-input" value="{{ asset.pk }}">
+                                        <label class="form-check-label"></label>
+                                    </div>
+                                </td>
+                                <td><a href="{% url 'asset-update' id=asset.id%}">{{ asset.id }}</a></td>
+                                <td>{{ asset.asset_type }}</td>
+                                <td>{{ asset.asset_name }}</td>
+                                <td>{{ asset.brand }}</td>
+                                <td>{{ asset.location }}</td>
+                                <td>{{ asset.isActive }}</td>
+                                <td>{{ asset.currentOwner }}</td>
+                            </tr>
+                            {% endfor %}
+                        </form>
+                    </table>    
+                </div>
+            
+        </div>
+        
+            </div>
+        
+
+    </div>
+{% endblock content%}

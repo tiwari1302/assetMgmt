@@ -1,0 +1,48 @@
+{% extends "assets/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="container row mr-4 ml-4">
+        <div class="col-md-10">
+            <div class="content-section" style="overflow-x:auto;">
+                <div class="container">
+                    <legend class="mb-3">Hello {{ request.user }}
+                        <a style = "position:absolute; right:50px;" class="mb-4 btn btn-secondary" href="{% url 'asset-type-create' %}">Add Asset Type</a>
+                        <!-- <a style = "position:absolute; right:200px;" class="mb-4 btn btn-danger" href="{% url 'asset-type-create' %}">Delete</a> -->
+                    </legend>
+                </div>
+                <div class="mb-4 ml-3">
+                    Action:
+                    <select class="ml-2" name="action" value="">
+                        <option> ------ </option>
+                        <option>Delete selected type(s)</option>
+                    </select>
+                    <button class="ml-2 btn btn-sm btn-danger" type="submit">Go</button>
+                </div>
+                <table class="table table-condensed table-hover responsive">
+                    <tr>
+                        <th>Select</th>
+                        <th>Asset Type ID</th>
+                        <th>Title</th>
+                        <th>Edit</th>
+                    </tr>
+                        {% for type in types %}
+                        <tr>
+                            <td>
+                            <div class="form-group form-check">
+                                <input type="checkbox" name="typeList[]" class="form-check-input" value="{{ type.pk }}">
+                                <label class="form-check-label"></label>
+                            </div>
+                            </td>
+                            <td>{{ type.id }}</td>
+                            <td>{{ type.title }}</td>
+                            <td><a href="{% url 'asset-type-update' pk=type.id%}">Edit</a></td>
+                        </tr>
+                        {% endfor %}
+                </table>    
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock content%}

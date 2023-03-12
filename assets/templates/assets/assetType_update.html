@@ -1,0 +1,18 @@
+{% extends "assets/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+        <div class="content-section container">
+            <form method="POST">
+                {% csrf_token %}
+                    <legend class="border-bottom mb-4">Update Asset Type</legend>
+                    <div class="form-group col-md-4">
+                        <label for="brand">Title</label>
+                        <input required type="text" class="form-control" id="title" name="title" value="{{ obj.title }}">
+                    </div>
+                <div class="fom-group">
+                    <button class="btn btn-outline-info">Update Type</button>
+                </div>
+            </form>
+        </div>
+
+{% endblock content%} 
