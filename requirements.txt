@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 asgiref==3.6.0
 Django==4.1.7
 django-crispy-forms==1.14.0
@@ -5,3 +6,12 @@ django-extensions==3.2.0
 django-filter==22.1
 sqlparse==0.4.3
 tzdata==2022.7
+=======
+asgiref==3.5.2
+Django==4.1
+django-crispy-forms==1.14.0
+django-extensions==3.2.0
+django-filter==22.1
+sqlparse==0.4.2
+tzdata==2022.2
+>>>>>>> 426b3357b6a219d0766822395d8bcbaeacea9c73

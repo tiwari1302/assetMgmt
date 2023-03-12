@@ -1,0 +1,65 @@
+{% extends 'assets/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Create Asset{% endblock %}
+
+{% block content %}
+    <div class="content-section container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <legend class="border-bottom mb-4">Add new asset</legend>
+            <fieldset class="form-group">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                      <label for="asset-type">Asset Type</label>
+                      <br>
+                      <select required class="form-group form-control" name="asset-type" id="asset-type">
+                        <option value="" selected="selected">--- SELECT ASSET TYPE ---</option>
+                        {% for type in asset_type_list %}
+                            <option value="{{type.title}}">
+                                {{type.title|capfirst}}
+                            </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="asset-name">Asset Name</label>
+                      <input required type="text" class="form-control" id="asset-name" name="asset-name" value="">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                      <label for="location">Location</label>
+                      <input required type="text" class="form-control" id="location" name="location" value="">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="brand">Brand</label>
+                      <input required type="text" class="form-control" id="brand" name="brand" value="">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="purchase_year">Purchase Year</label>
+                      <br>
+                      <select required class="form-control form-group col-md-12" id="purchase_year" name="purchase-year">
+                        {% for i in iterator %}
+                            <option value="{{ i }}">
+                                {{i}}
+                            </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col-md-4">
+                        <label for="is-active">Is Active?</label>
+                        <select required class="form-group form-control" name="is-active" id="is-active">
+                          <option>True</option>
+                          <option>False</option>
+                        </select>
+                    </div>
+                  </div>
+            </fieldset>
+            <input type="hidden" class="form-control" name="pdict" value="{{cuser}}">
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+{% endblock %}
+
