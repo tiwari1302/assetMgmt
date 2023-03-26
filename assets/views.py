@@ -82,7 +82,13 @@ def adminAssetView(request):
     if request.method=='POST':
         action = request.POST.get('action')
         if action == "Delete selected asset(s)":
-            deleteAssets(request)
+            assetList = request.POST.getlist('assetList[]') # returning id of assetType in list
+            for t in assetList:
+                obj = asset.objects.filter(id=t)
+                obj.delete()
+            
+            # pass
+            return redirect('assetsAdmin')
             
     context = {
         'assets': assets,
@@ -98,10 +104,13 @@ def adminAssetView(request):
 
 @user_passes_test(lambda u: u.is_superuser)
 def transactionsView(request):
-    context = {}
+    context = {
+        'transactions': Transaction.objects.all(),
+        'assets': asset.objects.all(),
+    }
  
     # add the dictionary during initialization
-    context["transactions"] = Transaction.objects.all()
+    # context["transactions"] = Transaction.objects.all()
          
     return render(request, "assets/transactions.html", context)
 
