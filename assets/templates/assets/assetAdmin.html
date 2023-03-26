@@ -101,9 +101,67 @@
                 </div>
             
         </div>
+<<<<<<< HEAD
         
             </div>
         
+=======
+        <!-- <div class=""> -->
+            <!-- <div class="col-md-2 mb-4">
+                <h4>Filters</h4>
+
+                <form class="mt-2 mb-2" method="get" action="">
+                    <select name="type">
+                        <option>Asset Type</option>
+                        {% for type in assetTypes %}
+                            <option>{{ type }}</option>
+                        {% endfor %}
+                    </select>
+    
+                    <select name="brand">
+                        <option>Brand</option>
+                        {% for brand in brandList %}
+                            <option>{{ brand }}</option>
+                        {% endfor %}
+                    </select>
+    
+                    <select name="isActive">
+                        <option selected>isActive</option>
+                        <option>True</option>
+                        <option>False</option>
+                    </select>
+    
+                    <select name="year">
+                        <option>Purchase year</option>
+                        {% for year in purchaseYearList %}
+                            <option>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+    
+                    <select name="location">
+                        <option>Location</option>
+                        {% for location in locationList %}
+                            <option>{{ location }}</option>
+                        {% endfor %}
+                    </select>
+    
+                    <select name="owner">
+                        <option>Owner</option>
+                        {% for owner in users %}
+                            <option>{{ owner }}</option>
+                        {% endfor %}
+                    </select>
+    
+                    <button class="btn btn-sm btn-primary" type="submit">Filter</button>
+                </form> -->
+<!-- 
+                <form method="get">
+                    {{ asset_filter.form|crispy }}
+                    <button class="btn btn-sm btn-primary mt-2">Filter</button>
+                </form> -->
+            </div>
+        <!-- </div> -->
+>>>>>>> 426b3357b6a219d0766822395d8bcbaeacea9c73
 
     </div>
 {% endblock content%}
