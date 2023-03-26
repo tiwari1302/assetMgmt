@@ -17,7 +17,7 @@
                     {% for transaction in transactions %}
                         <tr>
                             <td>{{ transaction.id }}</td>
-                            <td>{{ transaction.transferredAsset }}</td>
+                            <td><a href="{% url 'asset-update' id=transaction.transferredAsset.id%}">{{ transaction.transferredAsset }}</a></td>
                             <td>{{ transaction.oldOwner }}</td>
                             <td>{{ transaction.newOwner }}</td>
                             <td>{{ transaction.timestamp }}</td>
