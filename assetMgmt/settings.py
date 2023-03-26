@@ -24,11 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-<<<<<<< HEAD
 SECRET_KEY = 'django-insecure-a#a^nx3fry8ko+p)37i9*8g8_qd41q^)jnj4)-mx)jsbhu4p1r'
-=======
-SECRET_KEY = 'django-insecure-@)#w=w+ayp@mpt@or#9kr^ad(12!v3!_ez6d=x#31e4eat^yx1'
->>>>>>> 426b3357b6a219d0766822395d8bcbaeacea9c73
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -92,10 +88,6 @@ DATABASES = {
     }
 }
 
-<<<<<<< HEAD
-=======
-AUTH_USER_MODEL = "assets.User"
->>>>>>> 426b3357b6a219d0766822395d8bcbaeacea9c73
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

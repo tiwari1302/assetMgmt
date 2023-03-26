@@ -12,73 +12,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .filters import ListingFilter
 
-<<<<<<< HEAD
-=======
-@user_passes_test(lambda u: u.is_superuser)
-def testFilterView(request):
-    assets = asset.objects.all()
-    assetTypes = assetType.objects.all()
-    Users = User.objects.all()
-
-    brandList = []
-    locationList = []
-    purchaseYearList = []
-    for a in assets:
-        brandList.append(a.brand)
-        locationList.append(a.location)
-        purchaseYearList.append(a.purchase_year)
-
-    if request.method=="GET":
-        # print("get method working")
-        type_ = request.GET.get('type')
-        brand = request.GET.get('brand')
-        isActive = request.GET.get('isActive')
-        year = request.GET.get('year')
-        location = request.GET.get('location')
-        owner = request.GET.get('owner')
-        # print(owner)
-
-        if type_ != '' and type_ != None and type_ != 'Asset Type':
-            filter_type = list(assetType.objects.filter(title=type_).values('id'))
-            filter_type_id = filter_type[0].get("id")
-            assets=assets.filter(asset_type=filter_type_id)
-
-        if brand != '' and brand != None and brand != 'Brand':
-            assets=assets.filter(brand=brand)
-
-        if isActive != '' and isActive != None and isActive != 'isActive':
-            assets=assets.filter(isActive=isActive)
-
-        if year != '' and year != None and year != 'Purchase year':
-            assets=assets.filter(purchase_year=year)
-
-        if location != '' and location != None and location != 'Location':
-            assets=assets.filter(location=location)
-
-        if owner != '' and owner != None and owner != 'Owner':
-            filter_user = list(User.objects.filter(username=owner).values('id')) # 
-            filter_user_id = filter_user[0].get("id")   # returning query id
-            assets=assets.filter(currentOwner=filter_user_id)
-
-    context = {
-        'queryset':assets,
-        'brandList':set(brandList),
-        'typeList':assetType.objects.all(),
-        'locationList':set(locationList),
-        'purchaseYearList':set(purchaseYearList),
-        'ownerList':User.objects.all(),
-    }
-    return render(request, "assets/test.html", context)
->>>>>>> 426b3357b6a219d0766822395d8bcbaeacea9c73
 
 class SuperUserCheck(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_superuser
-<<<<<<< HEAD
     
-=======
-
->>>>>>> 426b3357b6a219d0766822395d8bcbaeacea9c73
 def filterAssets(request, queryset):
 
     # print("filter view working")
@@ -122,18 +60,6 @@ def filterAssets(request, queryset):
 
     return (assets)
 
-<<<<<<< HEAD
-=======
-def deleteAssets(request):
-    assetList = request.POST.getlist('assetList[]') # returning id of assetType in list
-    for t in assetList:
-        obj = asset.objects.filter(id=t)
-        obj.delete()
-            
-            # pass
-    return redirect('assetsAdmin')
-
->>>>>>> 426b3357b6a219d0766822395d8bcbaeacea9c73
 @user_passes_test(lambda u: u.is_superuser)
 def adminAssetView(request):
     assets = asset.objects.all()
@@ -333,10 +259,4 @@ def profile(request):
     context = {
         'u_form': u_form,
     }
-<<<<<<< HEAD
     return render(request, 'assets/profile.html', context)
-=======
-    return render(request, 'assets/profile.html', context)
-
-
->>>>>>> 426b3357b6a219d0766822395d8bcbaeacea9c73
